@@ -95,7 +95,7 @@ public class TranslationResource {
       List<Options> optionsList = new ArrayList<Options>();
       optionsList.add(Options.EnableAnnotations);
       if (disablePromotion) {
-        optionsList.add(Options.DisablePromotion);
+        optionsList.add(Options.DisableListPromotion);
       }
       Options[] options = optionsList.toArray(new Options[optionsList.size()]);
       return CqlTranslator.fromFile(cql, modelManager, libraryManager, options);
