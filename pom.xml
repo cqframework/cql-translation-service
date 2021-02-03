@@ -160,7 +160,7 @@
   <properties>
     <jersey.version>2.32</jersey.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <cqframework.version>1.5.1-SNAPSHOT</cqframework.version>
+    <cqframework.version>1.5.1</cqframework.version>
   </properties>
 
   <distributionManagement>
