@@ -3,11 +3,11 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.mitre.bonnie</groupId>
-  <artifactId>cqlTranslationServer</artifactId>
+  <groupId>com.ibm.cohort</groupId>
+  <artifactId>cql-translation-server</artifactId>
   <packaging>jar</packaging>
-  <version>1.4.9</version>
-  <name>cqlTranslationServer</name>
+  <version>${cqframework.version}</version>
+  <name>cql-translation-server</name>
 
   <repositories>
     <repository>
@@ -70,32 +70,32 @@
     <dependency>
       <groupId>info.cqframework</groupId>
       <artifactId>cql</artifactId>
-      <version>1.4.9</version>
+      <version>${cqframework.version}</version>
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
       <artifactId>model</artifactId>
-      <version>1.4.9</version>
+      <version>${cqframework.version}</version>
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
       <artifactId>cql-to-elm</artifactId>
-      <version>1.4.9</version>
+      <version>${cqframework.version}</version>
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
       <artifactId>elm</artifactId>
-      <version>1.4.9</version>
+      <version>${cqframework.version}</version>
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
       <artifactId>quick</artifactId>
-      <version>1.4.9</version>
+      <version>${cqframework.version}</version>
     </dependency>
     <dependency>
-		  <groupId>info.cqframework</groupId>
-		  <artifactId>qdm</artifactId>
-		  <version>1.4.9</version>
+      <groupId>info.cqframework</groupId>
+      <artifactId>qdm</artifactId>
+      <version>${cqframework.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
@@ -160,5 +160,14 @@
   <properties>
     <jersey.version>2.32</jersey.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <cqframework.version>1.5.1-SNAPSHOT</cqframework.version>
   </properties>
+
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/Alvearie/cql-translation-service</url>
+    </repository>
+  </distributionManagement>
 </project>
