@@ -1,22 +1,12 @@
 # fetch basic image
-FROM maven:3.6.1-jdk-8
+FROM us.icr.io/cdt-common-rns/base-images/ubi8-ibmjre:20210217.1642
 
-# application placed into /opt/app
-RUN mkdir -p /app
-WORKDIR /app
+WORKDIR /
 
-# selectively add the POM file and
-# install dependencies
-COPY pom.xml /app/
-RUN mvn install
-
-# rest of the project
-COPY src /app/src
-RUN mvn package
+COPY target/cql-translation-server-1.5.1-jar-with-dependencies.jar cql-translation-server-1.5.1-jar-with-dependencies.jar
 
 # local application port
 EXPOSE 8080
 
 # execute it
-# CMD ["mvn", "exec:java"]
-CMD ["java", "-jar", "target/cqlTranslationServer-1.4.9-jar-with-dependencies.jar", "-d"]
+CMD ["java", "-jar", "cql-translation-server-1.5.1-jar-with-dependencies.jar", "-d"]

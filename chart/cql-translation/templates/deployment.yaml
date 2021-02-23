@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "name" . }}
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    TOOLCHAIN_ID: {{ .Values.annotations.TOOLCHAIN_ID }}
+    GIT_URL: {{ .Values.annotations.GIT_URL }}
+    GIT_BRANCH: {{ .Values.annotations.GIT_BRANCH }}
+    GIT_COMMIT: {{ .Values.annotations.GIT_COMMIT }}
+    USER_NAME: {{ .Values.annotations.USER_NAME }}
+    APPLICATION_VERSION: {{ .Values.annotations.APPLICATION_VERSION }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          {{- range .Values.service.ports }}
+          - containerPort: {{ . }}
+          {{- end }}
+      nodeSelector:
+        worker-type: application

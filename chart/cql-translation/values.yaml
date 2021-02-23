@@ -1,0 +1,25 @@
+replicaCount: 1
+annotations:
+  TOOLCHAIN_ID: null
+  GIT_URL: null
+  GIT_BRANCH: null
+  GIT_COMMIT: null
+  USER_NAME: null
+  APPLICATION_VERSION: null
+
+image:
+  repository: <helm-repo>
+  tag: <helm-tag>
+  pullSecret: regsecret
+  pullPolicy: IfNotPresent
+  imageName: cql-translation
+
+DEBUG_FAILURE: false
+
+nameOverride: cql-translation
+
+service:
+  type: ClusterIP
+  externalPort: 8080
+  ports:
+    - 8080

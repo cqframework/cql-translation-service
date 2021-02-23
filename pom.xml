@@ -6,7 +6,7 @@
   <groupId>com.ibm.cohort</groupId>
   <artifactId>cql-translation-server</artifactId>
   <packaging>jar</packaging>
-  <version>${cqframework.version}</version>
+  <version>1.5.1-1</version>
   <name>cql-translation-server</name>
 
   <repositories>
