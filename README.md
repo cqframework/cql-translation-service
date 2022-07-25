@@ -1,6 +1,6 @@
 # CQL to ELM Translation Service
 
-A microservice wrapper for the CQL to ELM conversion library.
+A microservice wrapper for the CQL to ELM conversion library and CQL formatter.
 
 Build:
 
@@ -10,7 +10,11 @@ Execute via the command line:
 
     java -jar target/cqlTranslationServer-1.5.10-jar-with-dependencies.jar
 
-## Simple Request
+## Translator Endpoint
+
+The `/cql/translator` endpoint handles translating CQL to ELM JSON and/or XML.
+
+### Simple Translator Request
 
 Example usage via HTTP request:
 
@@ -63,7 +67,7 @@ Will return:
       }
     }
 
-## Multipart Request
+### Multipart Translator Request
 
 The service also supports `POST` of multiple CQL libraries packaged as
 `multipart/form-data`. The result will be a similar package with one ELM part for each
@@ -145,7 +149,7 @@ Will return:
     }
     --Boundary_2_526521536_1556163069788--
 
-## CQL-to-ELM Options
+### CQL-to-ELM Translator Options
 
 The CQL-to-ELM translator supports many options to control the output.  These options can be passed to the service as query parameters when you post CQL to the service (e.g., `POST http://localhost:8080/cql/translator?annotations=true&result-types=true`).  These query parameters are supported for both simple requests and multipart requests.  See the table below for the available options:
 
@@ -174,6 +178,97 @@ _**NOTE:**_
 * _Previous versions of the CQL-to-ELM Translation Service defaulted **annotations** to true.  To align better with the CQL-to-ELM console client, the translation service now defaults annotations to false._
 * _Previous versions of the CQL-to-ELM Translation Service allowed list-promotion to be disabled via an extra multipart form field named **disablePromotion**. This is no longer supported, as it was ambiguous and inconsistent with the CQL-to-ELM console clinet.  The **disable-list-promotion** query parameter should be used instead._
 
+## Formatter Endpoint
+
+The `/cql/formatter` endpoint handles reformatting CQL for improved consistency and readability.
+
+### Simple Formatter Request
+
+Example usage via HTTP request:
+
+    POST /cql/formatter HTTP/1.1
+    Content-Type: application/cql
+    Accept: application/cql
+    Host: localhost:8080
+    Content-Length: 50
+
+    library HelloWorld using QDM define Hello: 'World'
+
+Will return:
+
+    HTTP/1.1 200 OK
+    Content-Type: application/cql
+    Content-Length: 59
+
+    library HelloWorld
+
+    using QDM
+
+    define Hello:
+      'World'
+
+### Multipart Formatter Request
+
+The service also supports `POST` of multiple CQL libraries packaged as
+`multipart/form-data`. The result will be a similar package with one
+formatted part for each CQL part in the submitted package.
+
+Example usage via HTTP request:
+
+
+    POST /cql/formatter HTTP/1.1
+    Host: localhost:8080
+    Content-Type: multipart/form-data; boundary=X-INSOMNIA-BOUNDARY
+    Accept: multipart/form-data
+    Content-Length: 465
+
+    --X-INSOMNIA-BOUNDARY
+    Content-Disposition: form-data; name="Simple.cql"
+    library "SimpleLibrary" version '0.0.1' using FHIR version '4.0.1'
+    include "FHIRHelpers" version '4.0.1' called FHIRHelpers
+    context Patient define "MeaningOfLife": 42
+    --X-INSOMNIA-BOUNDARY
+    Content-Disposition: form-data; name="FHIRHelpers.cql"
+    library FHIRHelpers version '4.0.1' using FHIR version '4.0.1'
+    context Patient define "IsFakeFHIRHelpers": true
+    --X-INSOMNIA-BOUNDARY--
+
+Will return:
+
+    HTTP/1.1 200 OK
+    MIME-Version: 1.0
+    Content-Type: multipart/form-data;boundary=Boundary_2_1638692479_1658770032240
+    Content-Length: 600
+
+    --Boundary_2_1638692479_1658770032240
+    Content-Type: application/cql
+    Content-Disposition: form-data; name="FHIRHelpers.cql"
+
+    library FHIRHelpers version '4.0.1'
+
+    using FHIR version '4.0.1'
+
+    context Patient
+
+    define "IsFakeFHIRHelpers":
+      true
+    --Boundary_2_1638692479_1658770032240
+    Content-Type: application/cql
+    Content-Disposition: form-data; name="Simple.cql"
+
+    library "SimpleLibrary" version '0.0.1'
+
+    using FHIR version '4.0.1'
+
+    include "FHIRHelpers" version '4.0.1' called FHIRHelpers
+
+    context Patient
+
+    define "MeaningOfLife":
+      42
+    --Boundary_2_1638692479_1658770032240--
+
+
 ## Docker Deployment
 
 You may deploy pre-built Docker images into your existing hosting environment with:
@@ -192,7 +287,7 @@ To build your own image:
 
 ## License
 
-Copyright 2016-2019 The MITRE Corporation
+Copyright 2016-2022 The MITRE Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
