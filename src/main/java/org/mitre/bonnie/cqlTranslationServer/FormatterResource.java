@@ -20,9 +20,7 @@ import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 /**
- * Root resource (exposed at "formatter" path). Uses default per-request
- * life cycle so a new CQL LibraryManager is instantiated and used for each
- * request that can include a batch of related CQL files.
+ * Root resource (exposed at "formatter" path).
  */
 @Path("formatter")
 public class FormatterResource {
