@@ -44,7 +44,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
       -
-        if: github.event_name == "release"
+        if: github.event_name == 'release'
         name: Update repo description
         uses: peter-evans/dockerhub-description@v3
         with:
