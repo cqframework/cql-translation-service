@@ -8,7 +8,7 @@ Build:
 
 Execute via the command line:
 
-    java -jar target/cqlTranslationServer-1.5.10-jar-with-dependencies.jar
+    java -jar target/cqlTranslationServer-1.5.12-jar-with-dependencies.jar
 
 ## Translator Endpoint
 
@@ -277,9 +277,15 @@ You may deploy pre-built Docker images into your existing hosting environment wi
 
 And you're done. No environment variables or further configuration are needed. Jedis may use your existing Kubernetes, Open Shift etc installations as you see fit. :)
 
-To build your own image:
+To build your own image for your current architecture:
 
 	docker build -t cqframework/cql-translation-service:latest . # but use your your own repo and tag strings!
+
+To build your own image for multiple architectures (e.g., Intel and Mac M1):
+
+  docker buildx build --platform linux/amd64,linux/arm64 -t cqframework/cql-translation-service:latest . # but use your your own repo and tag strings!
+
+Note that Docker doesn't support loading multi-platform builds locally, so the above multi-platform build commmand is only helpful when used with `--push`. See: [https://github.com/docker/buildx/issues/59](https://github.com/docker/buildx/issues/59).
 
 ## Environment Variables
 

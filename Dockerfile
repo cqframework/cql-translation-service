@@ -1,5 +1,5 @@
 # fetch basic image
-FROM maven:3.6.1-jdk-8
+FROM maven:3.8.6-eclipse-temurin-11
 
 # application placed into /opt/app
 RUN mkdir -p /app
@@ -19,4 +19,4 @@ EXPOSE 8080
 
 # execute it
 # CMD ["mvn", "exec:java"]
-CMD ["java", "-jar", "target/cqlTranslationServer-1.5.10-jar-with-dependencies.jar", "-d"]
+CMD ["java", "-jar", "target/cqlTranslationServer-1.5.12-jar-with-dependencies.jar", "-d"]
