@@ -19,13 +19,19 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
+import org.cqframework.cql.cql2elm.CqlCompilerException;
 import org.cqframework.cql.cql2elm.CqlTranslator;
-import org.cqframework.cql.cql2elm.CqlTranslator.Options;
-import org.cqframework.cql.cql2elm.CqlTranslatorException;
-import org.cqframework.cql.cql2elm.FhirLibrarySourceProvider;
+import org.cqframework.cql.cql2elm.CqlTranslatorOptions.Options;
+import org.cqframework.cql.cql2elm.qdm.QdmModelInfoProvider;
 import org.cqframework.cql.cql2elm.LibraryBuilder;
 import org.cqframework.cql.cql2elm.LibraryManager;
 import org.cqframework.cql.cql2elm.ModelManager;
+import org.cqframework.cql.cql2elm.quick.FhirLibrarySourceProvider;
+import org.cqframework.cql.cql2elm.quick.FhirModelInfoProvider;
+import org.cqframework.cql.cql2elm.quick.QICoreModelInfoProvider;
+import org.cqframework.cql.cql2elm.quick.QuickFhirModelInfoProvider;
+import org.cqframework.cql.cql2elm.quick.QuickModelInfoProvider;
+import org.cqframework.cql.cql2elm.quick.UsCoreModelInfoProvider;
 import org.fhir.ucum.UcumEssenceService;
 import org.fhir.ucum.UcumException;
 import org.fhir.ucum.UcumService;
@@ -74,37 +80,37 @@ public class TranslationResource {
 
   public TranslationResource() {
     this.modelManager = new ModelManager();
+    // The DefaultModelInfoProvider does not work correctly with the uber-jar and in-memory CQL files, so
+    // load all the models we might want. Model resolution is attempted in the order the providers are added.
+    modelManager.getModelInfoLoader().registerModelInfoProvider(new FhirModelInfoProvider(), true);
+    modelManager.getModelInfoLoader().registerModelInfoProvider(new QICoreModelInfoProvider());
+    modelManager.getModelInfoLoader().registerModelInfoProvider(new QdmModelInfoProvider());
+    modelManager.getModelInfoLoader().registerModelInfoProvider(new QuickModelInfoProvider());
+    modelManager.getModelInfoLoader().registerModelInfoProvider(new QuickFhirModelInfoProvider());
+    modelManager.getModelInfoLoader().registerModelInfoProvider(new UsCoreModelInfoProvider());
     this.libraryManager = new LibraryManager(modelManager);
+    // FHIR library source provider is always needed for FHIR and harmless for other models
+    libraryManager.getLibrarySourceLoader().registerProvider(new FhirLibrarySourceProvider());
   }
 
   @POST
   @Consumes(CQL_TEXT_TYPE)
   @Produces(ELM_XML_TYPE)
   public Response cqlToElmXml(File cql, @Context UriInfo info) {
-    try {
-      libraryManager.getLibrarySourceLoader().registerProvider(new FhirLibrarySourceProvider());
-      CqlTranslator translator = getTranslator(cql, info.getQueryParameters());
-      ResponseBuilder resp = getResponse(translator);
-      resp = resp.entity(translator.toXml()).type(ELM_XML_TYPE);
-      return resp.build();
-    } finally {
-      libraryManager.getLibrarySourceLoader().clearProviders();
-    }
+    CqlTranslator translator = getTranslator(cql, info.getQueryParameters());
+    ResponseBuilder resp = getResponse(translator);
+    resp = resp.entity(translator.toXml()).type(ELM_XML_TYPE);
+    return resp.build();
   }
 
   @POST
   @Consumes(CQL_TEXT_TYPE)
   @Produces(ELM_JSON_TYPE)
   public Response cqlToElmJson(File cql, @Context UriInfo info) {
-    try {
-      libraryManager.getLibrarySourceLoader().registerProvider(new FhirLibrarySourceProvider());
-      CqlTranslator translator = getTranslator(cql, info.getQueryParameters());
-      ResponseBuilder resp = getResponse(translator);
-      resp = resp.entity(translator.toJson()).type(ELM_JSON_TYPE);
-      return resp.build();
-    } finally {
-      libraryManager.getLibrarySourceLoader().clearProviders();
-    }
+    CqlTranslator translator = getTranslator(cql, info.getQueryParameters());
+    ResponseBuilder resp = getResponse(translator);
+    resp = resp.entity(translator.toJson()).type(ELM_JSON_TYPE);
+    return resp.build();
   }
 
   @POST
@@ -115,11 +121,9 @@ public class TranslationResource {
           @HeaderParam(TARGET_FORMAT) @DefaultValue(ELM_JSON_TYPE) List<String> targetFormats,
           @Context UriInfo info
   ) {
-    // Jersey doesn't support parsing multiple value headers by comma, so we need to do it 
-	// for ourselves. See https://github.com/jersey/jersey/issues/2436
+    // Jersey doesn't support parsing multiple value headers by comma, so we need to do it
+	  // for ourselves. See https://github.com/jersey/jersey/issues/2436
     try {
-      // note: if FhirLibrarySourceProvider isn't registered first it doesn't seem to work
-      libraryManager.getLibrarySourceLoader().registerProvider(new FhirLibrarySourceProvider());
       MultipartLibrarySourceProvider lsp = new MultipartLibrarySourceProvider(pkg);
       libraryManager.getLibrarySourceLoader().registerProvider(lsp);
       FormDataMultiPart translatedPkg = new FormDataMultiPart();
@@ -145,14 +149,14 @@ public class TranslationResource {
     } catch (IOException ex) {
       throw new TranslationFailureException("Unable to read request");
     } finally {
+      // Clear the package-based source provider then add back the FHIR library source provider
       libraryManager.getLibrarySourceLoader().clearProviders();
+      libraryManager.getLibrarySourceLoader().registerProvider(new FhirLibrarySourceProvider());
     }
   }
 
   private CqlTranslator getTranslator(File cql, MultivaluedMap<String, String> params) {
     try {
-      //LibrarySourceLoader.registerProvider(
-      //        new DefaultLibrarySourceProvider(cql.toPath().getParent()));
       UcumService ucumService = null;
       LibraryBuilder.SignatureLevel signatureLevel = LibraryBuilder.SignatureLevel.None;
       List<Options> optionsList = new ArrayList<>();
@@ -170,9 +174,8 @@ public class TranslationResource {
         }
       }
       Options[] options = optionsList.toArray(new Options[optionsList.size()]);
-      return CqlTranslator.fromFile(cql, modelManager, libraryManager, ucumService, CqlTranslatorException.ErrorSeverity.Info,
+      return CqlTranslator.fromFile(cql, modelManager, libraryManager, ucumService, CqlCompilerException.ErrorSeverity.Info,
               signatureLevel, options);
-      //LibrarySourceLoader.clearProviders();
     } catch (IOException e) {
       throw new TranslationFailureException("Unable to read request");
     }

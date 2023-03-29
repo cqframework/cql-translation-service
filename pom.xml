@@ -6,7 +6,7 @@
   <groupId>org.mitre.bonnie</groupId>
   <artifactId>cqlTranslationServer</artifactId>
   <packaging>jar</packaging>
-  <version>1.5.12</version>
+  <version>2.7.0</version>
   <name>cqlTranslationServer</name>
 
   <repositories>
@@ -59,53 +59,58 @@
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-jaxrs</artifactId>
-      <version>3.11.0.Final</version>
+      <version>3.12.1.Final</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.9</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
       <artifactId>cql</artifactId>
-      <version>1.5.12</version>
+      <version>${cql.version}</version>
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
       <artifactId>model</artifactId>
-      <version>1.5.12</version>
+      <version>${cql.version}</version>
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
       <artifactId>cql-to-elm</artifactId>
-      <version>1.5.12</version>
+      <version>${cql.version}</version>
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
-      <artifactId>elm</artifactId>
-      <version>1.5.12</version>
+      <artifactId>model-jaxb</artifactId>
+      <version>${cql.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>info.cqframework</groupId>
+      <artifactId>elm-jaxb</artifactId>
+      <version>${cql.version}</version>
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
       <artifactId>quick</artifactId>
-      <version>1.5.12</version>
+      <version>${cql.version}</version>
     </dependency>
     <dependency>
 		  <groupId>info.cqframework</groupId>
 		  <artifactId>qdm</artifactId>
-		  <version>1.5.12</version>
+		  <version>${cql.version}</version>
     </dependency>
     <dependency>
 		  <groupId>info.cqframework</groupId>
 		  <artifactId>cql-formatter</artifactId>
-		  <version>1.5.12</version>
+		  <version>${cql.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
       <artifactId>commons-cli</artifactId>
-      <version>1.4</version>
+      <version>1.5.0</version>
     </dependency>
   </dependencies>
 
@@ -117,14 +122,14 @@
         <version>2.5.1</version>
         <inherited>true</inherited>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>11</source>
+          <target>11</target>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>1.2.1</version>
+        <version>1.6.0</version>
         <executions>
           <execution>
             <goals>
@@ -163,7 +168,8 @@
   </build>
 
   <properties>
-    <jersey.version>2.32</jersey.version>
+    <cql.version>2.7.0</cql.version>
+    <jersey.version>2.39.1</jersey.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>

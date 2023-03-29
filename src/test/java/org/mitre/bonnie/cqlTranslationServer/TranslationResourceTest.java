@@ -191,7 +191,7 @@ public class TranslationResourceTest {
     assertEquals(2, annotations.size());
     JsonObject errorAnnotation = annotations.getJsonObject(1);
     assertEquals("CqlToElmError", errorAnnotation.getString("type"));
-    assertEquals("semantic", errorAnnotation.getString("errorType"));
+    assertEquals("include", errorAnnotation.getString("errorType"));
     assertEquals(5, errorAnnotation.getInt("startLine"));
     assertEquals(1, errorAnnotation.getInt("startChar"));
     assertEquals("Could not load source for library CMSAll, version 1.", errorAnnotation.getString("message"));

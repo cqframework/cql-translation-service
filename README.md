@@ -8,7 +8,7 @@ Build:
 
 Execute via the command line:
 
-    java -jar target/cqlTranslationServer-1.5.12-jar-with-dependencies.jar
+    java -jar target/cqlTranslationServer-2.7.0-jar-with-dependencies.jar
 
 ## Translator Endpoint
 
