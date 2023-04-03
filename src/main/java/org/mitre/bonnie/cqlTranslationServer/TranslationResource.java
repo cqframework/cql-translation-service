@@ -22,16 +22,10 @@ import javax.ws.rs.core.UriInfo;
 import org.cqframework.cql.cql2elm.CqlCompilerException;
 import org.cqframework.cql.cql2elm.CqlTranslator;
 import org.cqframework.cql.cql2elm.CqlTranslatorOptions.Options;
-import org.cqframework.cql.cql2elm.qdm.QdmModelInfoProvider;
 import org.cqframework.cql.cql2elm.LibraryBuilder;
 import org.cqframework.cql.cql2elm.LibraryManager;
 import org.cqframework.cql.cql2elm.ModelManager;
 import org.cqframework.cql.cql2elm.quick.FhirLibrarySourceProvider;
-import org.cqframework.cql.cql2elm.quick.FhirModelInfoProvider;
-import org.cqframework.cql.cql2elm.quick.QICoreModelInfoProvider;
-import org.cqframework.cql.cql2elm.quick.QuickFhirModelInfoProvider;
-import org.cqframework.cql.cql2elm.quick.QuickModelInfoProvider;
-import org.cqframework.cql.cql2elm.quick.UsCoreModelInfoProvider;
 import org.fhir.ucum.UcumEssenceService;
 import org.fhir.ucum.UcumException;
 import org.fhir.ucum.UcumService;
@@ -80,14 +74,6 @@ public class TranslationResource {
 
   public TranslationResource() {
     this.modelManager = new ModelManager();
-    // The DefaultModelInfoProvider does not work correctly with the uber-jar and in-memory CQL files, so
-    // load all the models we might want. Model resolution is attempted in the order the providers are added.
-    modelManager.getModelInfoLoader().registerModelInfoProvider(new FhirModelInfoProvider(), true);
-    modelManager.getModelInfoLoader().registerModelInfoProvider(new QICoreModelInfoProvider());
-    modelManager.getModelInfoLoader().registerModelInfoProvider(new QdmModelInfoProvider());
-    modelManager.getModelInfoLoader().registerModelInfoProvider(new QuickModelInfoProvider());
-    modelManager.getModelInfoLoader().registerModelInfoProvider(new QuickFhirModelInfoProvider());
-    modelManager.getModelInfoLoader().registerModelInfoProvider(new UsCoreModelInfoProvider());
     this.libraryManager = new LibraryManager(modelManager);
     // FHIR library source provider is always needed for FHIR and harmless for other models
     libraryManager.getLibrarySourceLoader().registerProvider(new FhirLibrarySourceProvider());

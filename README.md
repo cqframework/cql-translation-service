@@ -8,7 +8,19 @@ Build:
 
 Execute via the command line:
 
-    java -jar target/cqlTranslationServer-2.7.0-jar-with-dependencies.jar
+    java -jar target/cqlTranslationServer-2.0.0.jar
+
+_NOTE: The cqlTranslationServer jar assumes that all dependency jars are located in a `lib` directory relative to the jar's location. If you move the jar from the `target` directory, you will need to move the `target/lib` directory as well. This project no longer produces an "uber-jar", as the CQL-to-ELM classes do not function properly when repackaged into a single jar file._
+
+## Version Table
+
+CQL Translation Service versions prior to version 2.0.0 always mirrored the CQL Tools (CQL-to-ELM translator) version they exposed. Starting with version 2.0.0, semantic versioning is now used. As a result, the version of the CQL Translation Service differs from the version of the CQL Tools that it exposes. The following table shows the relationship between [CQL Translation Service releases](https://github.com/cqframework/cql-translation-service/releases) and [CQL Tools releases](https://github.com/cqframework/clinical_quality_language/releases). Note that prior releases from the [MITRE repo](https://github.com/mitre/cql-translation-service/releases) are not included here.
+
+| CQL Translation Service | CQL Tools                               |
+|-------------------------|-----------------------------------------|
+| 2.0.0                   | 2.7.0                                   |
+| 1.1.0-SNAPSHOT - 1.5.12 | Matches CQL Translation Service version |
+| 1.0.2                   | 1.0.0                                   |
 
 ## Translator Endpoint
 
@@ -176,7 +188,7 @@ For more information on each of these options, see the [CQL-to-ELM Overview](htt
 
 _**NOTE:**_
 * _Previous versions of the CQL-to-ELM Translation Service defaulted **annotations** to true.  To align better with the CQL-to-ELM console client, the translation service now defaults annotations to false._
-* _Previous versions of the CQL-to-ELM Translation Service allowed list-promotion to be disabled via an extra multipart form field named **disablePromotion**. This is no longer supported, as it was ambiguous and inconsistent with the CQL-to-ELM console clinet.  The **disable-list-promotion** query parameter should be used instead._
+* _Previous versions of the CQL-to-ELM Translation Service allowed list-promotion to be disabled via an extra multipart form field named **disablePromotion**. This is no longer supported, as it was ambiguous and inconsistent with the CQL-to-ELM console client.  The **disable-list-promotion** query parameter should be used instead._
 
 ## Formatter Endpoint
 
@@ -293,7 +305,7 @@ Note that Docker doesn't support loading multi-platform builds locally, so the a
 
 ## License
 
-Copyright 2016-2022 The MITRE Corporation
+Copyright 2016-2023 The MITRE Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
