@@ -1,5 +1,5 @@
 # fetch basic image
-FROM maven:3.9.0-eclipse-temurin-11
+FROM maven:3.9.5-eclipse-temurin-11
 
 # application placed into /opt/app
 RUN mkdir -p /app
@@ -19,4 +19,4 @@ EXPOSE 8080
 
 # execute it
 # CMD ["mvn", "exec:java"]
-CMD ["java", "-jar", "target/cqlTranslationServer-2.1.0.jar", "-d"]
+CMD ["java", "-jar", "target/cqlTranslationServer-2.2.0.jar", "-d"]
