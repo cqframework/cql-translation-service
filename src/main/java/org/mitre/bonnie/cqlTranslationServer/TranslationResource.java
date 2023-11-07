@@ -19,16 +19,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.cqframework.cql.cql2elm.CqlCompilerException;
+
+import org.cqframework.cql.cql2elm.CqlCompilerOptions;
 import org.cqframework.cql.cql2elm.CqlTranslator;
-import org.cqframework.cql.cql2elm.CqlTranslatorOptions.Options;
 import org.cqframework.cql.cql2elm.LibraryBuilder;
+import org.cqframework.cql.cql2elm.CqlCompilerOptions.Options;
 import org.cqframework.cql.cql2elm.LibraryManager;
 import org.cqframework.cql.cql2elm.ModelManager;
+import org.cqframework.cql.cql2elm.CqlCompilerException.ErrorSeverity;
 import org.cqframework.cql.cql2elm.quick.FhirLibrarySourceProvider;
-import org.fhir.ucum.UcumEssenceService;
-import org.fhir.ucum.UcumException;
-import org.fhir.ucum.UcumService;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
@@ -69,34 +68,36 @@ public class TranslationResource {
             Options.EnableResultTypes)
     );
   }};
-  private final ModelManager modelManager;
-  private final LibraryManager libraryManager;
-
-  public TranslationResource() {
-    this.modelManager = new ModelManager();
-    this.libraryManager = new LibraryManager(modelManager);
-    // FHIR library source provider is always needed for FHIR and harmless for other models
-    libraryManager.getLibrarySourceLoader().registerProvider(new FhirLibrarySourceProvider());
-  }
 
   @POST
   @Consumes(CQL_TEXT_TYPE)
   @Produces(ELM_XML_TYPE)
   public Response cqlToElmXml(File cql, @Context UriInfo info) {
-    CqlTranslator translator = getTranslator(cql, info.getQueryParameters());
-    ResponseBuilder resp = getResponse(translator);
-    resp = resp.entity(translator.toXml()).type(ELM_XML_TYPE);
-    return resp.build();
+    try {
+      LibraryManager libraryManager = this.getLibraryManager(info.getQueryParameters());
+      CqlTranslator translator = CqlTranslator.fromFile(cql, libraryManager);
+      ResponseBuilder resp = getResponse(translator);
+      resp = resp.entity(translator.toXml()).type(ELM_XML_TYPE);
+      return resp.build();
+    } catch (IOException e) {
+      throw new TranslationFailureException("Unable to read request");
+    }
+
   }
 
   @POST
   @Consumes(CQL_TEXT_TYPE)
   @Produces(ELM_JSON_TYPE)
   public Response cqlToElmJson(File cql, @Context UriInfo info) {
-    CqlTranslator translator = getTranslator(cql, info.getQueryParameters());
-    ResponseBuilder resp = getResponse(translator);
-    resp = resp.entity(translator.toJson()).type(ELM_JSON_TYPE);
-    return resp.build();
+    try {
+      LibraryManager libraryManager = this.getLibraryManager(info.getQueryParameters());
+      CqlTranslator translator = CqlTranslator.fromFile(cql, libraryManager);
+      ResponseBuilder resp = getResponse(translator);
+      resp = resp.entity(translator.toJson()).type(ELM_JSON_TYPE);
+      return resp.build();
+    } catch (IOException e) {
+      throw new TranslationFailureException("Unable to read request");
+    }
   }
 
   @POST
@@ -110,12 +111,12 @@ public class TranslationResource {
     // Jersey doesn't support parsing multiple value headers by comma, so we need to do it
 	  // for ourselves. See https://github.com/jersey/jersey/issues/2436
     try {
-      MultipartLibrarySourceProvider lsp = new MultipartLibrarySourceProvider(pkg);
-      libraryManager.getLibrarySourceLoader().registerProvider(lsp);
+      LibraryManager libraryManager = this.getLibraryManager(info.getQueryParameters());
+      libraryManager.getLibrarySourceLoader().registerProvider(new MultipartLibrarySourceProvider(pkg));
       FormDataMultiPart translatedPkg = new FormDataMultiPart();
       for (String fieldId: pkg.getFields().keySet()) {
         for (FormDataBodyPart part: pkg.getFields(fieldId)) {
-          CqlTranslator translator = getTranslator(part.getEntityAs(File.class), info.getQueryParameters());
+          CqlTranslator translator = CqlTranslator.fromFile(part.getEntityAs(File.class), libraryManager);
           for( String format : targetFormats ) {
             for( String subformat : format.split(",") ) {
               MediaType targetFormat = MediaType.valueOf( subformat );
@@ -134,37 +135,24 @@ public class TranslationResource {
       return resp.build();
     } catch (IOException ex) {
       throw new TranslationFailureException("Unable to read request");
-    } finally {
-      // Clear the package-based source provider then add back the FHIR library source provider
-      libraryManager.getLibrarySourceLoader().clearProviders();
-      libraryManager.getLibrarySourceLoader().registerProvider(new FhirLibrarySourceProvider());
     }
   }
 
-  private CqlTranslator getTranslator(File cql, MultivaluedMap<String, String> params) {
-    try {
-      UcumService ucumService = null;
-      LibraryBuilder.SignatureLevel signatureLevel = LibraryBuilder.SignatureLevel.None;
-      List<Options> optionsList = new ArrayList<>();
-      for (String key: params.keySet()) {
-        if (PARAMS_TO_OPTIONS_MAP.containsKey(key) && Boolean.parseBoolean(params.getFirst(key))) {
-          optionsList.addAll(PARAMS_TO_OPTIONS_MAP.get(key));
-        } else if (key.equals("validate-units") && Boolean.parseBoolean(params.getFirst(key))) {
-          try {
-            ucumService = new UcumEssenceService(UcumEssenceService.class.getResourceAsStream("/ucum-essence.xml"));
-          } catch (UcumException e) {
-            throw new TranslationFailureException("Cannot load UCUM service to validate units");
-          }
-        } else if (key.equals("signatures")) {
-          signatureLevel = LibraryBuilder.SignatureLevel.valueOf(params.getFirst("signatures"));
-        }
+  private LibraryManager getLibraryManager(MultivaluedMap<String, String> params) {
+    LibraryBuilder.SignatureLevel signatureLevel = LibraryBuilder.SignatureLevel.None;
+    List<Options> optionsList = new ArrayList<>();
+    for (String key: params.keySet()) {
+      if (PARAMS_TO_OPTIONS_MAP.containsKey(key) && Boolean.parseBoolean(params.getFirst(key))) {
+        optionsList.addAll(PARAMS_TO_OPTIONS_MAP.get(key));
+      } else if (key.equals("signatures")) {
+        signatureLevel = LibraryBuilder.SignatureLevel.valueOf(params.getFirst("signatures"));
       }
-      Options[] options = optionsList.toArray(new Options[optionsList.size()]);
-      return CqlTranslator.fromFile(cql, modelManager, libraryManager, ucumService, CqlCompilerException.ErrorSeverity.Info,
-              signatureLevel, options);
-    } catch (IOException e) {
-      throw new TranslationFailureException("Unable to read request");
     }
+    Options[] options = optionsList.toArray(new Options[optionsList.size()]);
+    LibraryManager libraryManager = new LibraryManager(new ModelManager(), new CqlCompilerOptions(ErrorSeverity.Info, signatureLevel, options));
+    // FHIR library source provider is always needed for FHIR and harmless for other models
+    libraryManager.getLibrarySourceLoader().registerProvider(new FhirLibrarySourceProvider());
+    return libraryManager;
   }
 
   private ResponseBuilder getResponse(CqlTranslator translator) {
