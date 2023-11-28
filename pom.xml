@@ -112,6 +112,15 @@
       <artifactId>commons-cli</artifactId>
       <version>1.6.0</version>
     </dependency>
+    <!--
+      We now need to supply our own xpp3 implementation. Use the same one as is used here:
+      https://github.com/cqframework/clinical_quality_language/blob/master/Src/java/buildSrc/src/main/groovy/cql.fhir-conventions.gradle
+    -->
+    <dependency>
+      <groupId>org.ogce</groupId>
+      <artifactId>xpp3</artifactId>
+      <version>1.1.6</version>
+    </dependency>
   </dependencies>
 
   <build>

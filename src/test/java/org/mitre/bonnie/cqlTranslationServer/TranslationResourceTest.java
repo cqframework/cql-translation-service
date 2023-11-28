@@ -365,6 +365,23 @@ public class TranslationResourceTest {
     }
   }
 
+  @Test
+  public void testLibraryThatNeedsUCUM() {
+    File file = new File(TranslationResourceTest.class.getResource("NeedsUCUM.cql").getFile());
+    Response resp = target.path("translator").queryParam("signatures", "All").request(TranslationResource.ELM_JSON_TYPE).post(Entity.entity(file, TranslationResource.CQL_TEXT_TYPE));
+    assertEquals(Status.OK.getStatusCode(), resp.getStatus());
+    assertEquals(TranslationResource.ELM_JSON_TYPE, resp.getMediaType().toString());
+    assertTrue(resp.hasEntity());
+    JsonReader reader = Json.createReader(new StringReader(resp.readEntity(String.class)));
+    JsonObject obj = reader.readObject();
+    JsonObject library = obj.getJsonObject("library");
+    JsonArray annotations = library.getJsonArray("annotation");
+    assertEquals(1, annotations.size());
+    JsonObject identifier = library.getJsonObject("identifier");
+    assertEquals("NeedsUCUM", identifier.getString("id"));
+    assertEquals("0.0.1", identifier.getString("version"));
+  }
+
   private Document parseAndValidateXml( BodyPart input, String expectedId, String expectedVersion, int expectedErrors ) throws Exception {
       Document doc = parseXml(input.getEntityAs(String.class));
       String errorCount = applyXPath(doc, "count(/elm:library/elm:annotation[@errorType='syntax'])");
