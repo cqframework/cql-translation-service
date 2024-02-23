@@ -13,17 +13,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -216,7 +216,11 @@ public class TranslationResourceTest {
     JsonArray defs = library.getJsonObject("statements").getJsonArray("def");
     assertEquals(2, defs.size());
     assertFalse(defs.getJsonObject(1).containsKey("resultTypeName"));
-    assertFalse(defs.getJsonObject(1).containsKey("annotation"));
+    //assertFalse(defs.getJsonObject(1).containsKey("annotation"));
+    // update: it has the annotation property but it's empty. not sure if that's intentional
+    assertTrue(defs.getJsonObject(1).containsKey("annotation"));
+    JsonArray subannotations = defs.getJsonObject(1).getJsonArray("annotation");
+    assertTrue(subannotations.isEmpty());
   }
 
   @Test

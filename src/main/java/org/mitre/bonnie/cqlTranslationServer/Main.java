@@ -3,8 +3,8 @@ package org.mitre.bonnie.cqlTranslationServer;
 import java.io.IOException;
 import java.net.URI;
 
-import javax.ws.rs.core.Feature;
-import javax.ws.rs.core.FeatureContext;
+import jakarta.ws.rs.core.Feature;
+import jakarta.ws.rs.core.FeatureContext;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
