@@ -216,8 +216,8 @@ public class TranslationResourceTest {
     JsonArray defs = library.getJsonObject("statements").getJsonArray("def");
     assertEquals(2, defs.size());
     assertFalse(defs.getJsonObject(1).containsKey("resultTypeName"));
-    //assertFalse(defs.getJsonObject(1).containsKey("annotation"));
-    // update: it has the annotation property but it's empty. not sure if that's intentional
+    // assertFalse(defs.getJsonObject(1).containsKey("annotation"));
+    // As of translator 3.7.1 the annotation property is present but empty
     assertTrue(defs.getJsonObject(1).containsKey("annotation"));
     JsonArray subannotations = defs.getJsonObject(1).getJsonArray("annotation");
     assertTrue(subannotations.isEmpty());
