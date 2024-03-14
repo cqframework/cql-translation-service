@@ -1,6 +1,6 @@
 library TestListPromotionIn
 
-using QUICK
+using FHIR version '4.0.1'
 
 context Patient
 

@@ -39,7 +39,7 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 @Path("translator")
 public class TranslationResource {
 
-  public static final String CQL_TEXT_TYPE = "application/cql";
+  public static final String CQL_TEXT_TYPE = "text/cql";
   public static final String ELM_XML_TYPE = "application/elm+xml";
   public static final String ELM_JSON_TYPE = "application/elm+json";
   public static final String TARGET_FORMAT = "X-TargetFormat";
