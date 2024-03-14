@@ -25,7 +25,7 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 @Path("formatter")
 public class FormatterResource {
 
-  public static final String CQL_TEXT_TYPE = "application/cql";
+  public static final String CQL_TEXT_TYPE = "text/cql";
   public static final String TARGET_FORMAT = "X-TargetFormat";
 
   @POST
@@ -59,7 +59,7 @@ public class FormatterResource {
   ) {
     if (!targetFormat.equals(MediaType.valueOf(CQL_TEXT_TYPE))) {
       throw new FormatFailureException(
-        String.format("Unsupported media type: %s. Must be application/cql.", targetFormat.toString())
+        String.format("Unsupported media type: %s. Must be text/cql.", targetFormat.toString())
       );
     }
     try {

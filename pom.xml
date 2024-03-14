@@ -131,6 +131,16 @@
       <artifactId>jakarta.xml.bind-api</artifactId>
       <version>3.0.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4jVersion}</version>
+      </dependency>
+      <dependency> 
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${slf4jVersion}</version>
+      </dependency>
   </dependencies>
 
   <build>
@@ -197,5 +207,6 @@
     <cql.version>3.7.1</cql.version>
     <jersey.version>3.0.12</jersey.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <slf4jVersion>2.0.12</slf4jVersion>
   </properties>
 </project>

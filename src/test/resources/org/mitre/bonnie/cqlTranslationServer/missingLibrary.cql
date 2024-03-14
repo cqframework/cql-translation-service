@@ -1,6 +1,6 @@
 library CMS146 version '2'
 
-using QUICK
+using FHIR version '4.0.1'
 
 include CMSAll version '1' called foo
 
