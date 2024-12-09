@@ -98,7 +98,7 @@ public class TranslationResourceTest {
   private void validateListPromotionDisabled(String cqlTitle, int startLine, int startChar, String errorMessage) {
     File file = new File(TranslationResourceTest.class.getResource(cqlTitle).getFile());
     FormDataMultiPart pkg = new FormDataMultiPart();
-    pkg.field("test", file, new MediaType("application", "cql"));
+    pkg.field("test", file, new MediaType("text", "cql"));
     Response resp = target.path("translator").queryParam("disable-list-promotion", "true").request(MediaType.MULTIPART_FORM_DATA).post(Entity.entity(pkg, MediaType.MULTIPART_FORM_DATA));
     assertTrue(resp.hasEntity());
     assertEquals(MediaType.MULTIPART_FORM_DATA_TYPE.getType(), resp.getMediaType().getType());
@@ -122,7 +122,7 @@ public class TranslationResourceTest {
   private void validateListPromotionEnabled(String cqlTitle) {
     File file = new File(TranslationResourceTest.class.getResource(cqlTitle).getFile());
     FormDataMultiPart pkg = new FormDataMultiPart();
-    pkg.field("test", file, new MediaType("application", "cql"));
+    pkg.field("test", file, new MediaType("text", "cql"));
     Response resp = target.path("translator").queryParam("disable-list-promotion", "false").request(MediaType.MULTIPART_FORM_DATA).post(Entity.entity(pkg, MediaType.MULTIPART_FORM_DATA));
     assertTrue(resp.hasEntity());
     assertEquals(MediaType.MULTIPART_FORM_DATA_TYPE.getType(), resp.getMediaType().getType());
@@ -272,7 +272,7 @@ public class TranslationResourceTest {
   void testSingleLibraryAsMultipart() {
     File file = new File(TranslationResourceTest.class.getResource("valid.cql").getFile());
     FormDataMultiPart pkg = new FormDataMultiPart();
-    pkg.field("foo", file, new MediaType("application", "cql"));
+    pkg.field("foo", file, new MediaType("text", "cql"));
     Response resp = target.path("translator").request(MediaType.MULTIPART_FORM_DATA).post(Entity.entity(pkg, MediaType.MULTIPART_FORM_DATA));
     assertEquals(Status.OK.getStatusCode(), resp.getStatus());
     assertEquals(MediaType.MULTIPART_FORM_DATA_TYPE.getType(), resp.getMediaType().getType());
@@ -290,7 +290,7 @@ public class TranslationResourceTest {
     FormDataMultiPart pkg = new FormDataMultiPart();
     for (String filename: filenames) {
       File file = new File(TranslationResourceTest.class.getResource(filename).getFile());
-      pkg.field(filename, file, new MediaType("application", "cql"));
+      pkg.field(filename, file, new MediaType("text", "cql"));
     }
     Response resp = target.path("translator").request(MediaType.MULTIPART_FORM_DATA).post(Entity.entity(pkg, MediaType.MULTIPART_FORM_DATA));
     assertEquals(Status.OK.getStatusCode(), resp.getStatus());
@@ -318,7 +318,7 @@ public class TranslationResourceTest {
     FormDataMultiPart pkg = new FormDataMultiPart();
     for (String filename: filenames) {
       File file = new File(TranslationResourceTest.class.getResource(filename).getFile());
-      pkg.field(filename, file, new MediaType("application", "cql"));
+      pkg.field(filename, file, new MediaType("text", "cql"));
     }
 
     Response resp = target.path("translator").request(MediaType.MULTIPART_FORM_DATA)
@@ -342,7 +342,7 @@ public class TranslationResourceTest {
     FormDataMultiPart pkg = new FormDataMultiPart();
     for (String filename: filenames) {
       File file = new File(TranslationResourceTest.class.getResource(filename).getFile());
-      pkg.field(filename, file, new MediaType("application", "cql"));
+      pkg.field(filename, file, new MediaType("text", "cql"));
     }
 
     Response resp = target.path("translator").request(MediaType.MULTIPART_FORM_DATA)
