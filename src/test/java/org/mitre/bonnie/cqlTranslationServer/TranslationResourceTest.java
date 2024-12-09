@@ -1,10 +1,10 @@
 package org.mitre.bonnie.cqlTranslationServer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,9 +39,9 @@ import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -51,7 +51,7 @@ public class TranslationResourceTest {
   private HttpServer server;
   private WebTarget target;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     // start the server
     server = Main.startServer();
@@ -67,7 +67,7 @@ public class TranslationResourceTest {
     target = c.target(Main.BASE_URI.replace("0.0.0.0", "localhost"));
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     server.shutdownNow();
   }
@@ -139,7 +139,7 @@ public class TranslationResourceTest {
   }
 
   @Test
-  public void testInvalidCqlAsXml() {
+  void testInvalidCqlAsXml() {
     File file = new File(TranslationResourceTest.class.getResource("invalid.cql").getFile());
     Response resp = target.path("translator").request(TranslationResource.ELM_XML_TYPE).post(Entity.entity(file, TranslationResource.CQL_TEXT_TYPE));
     assertEquals(Status.BAD_REQUEST.getStatusCode(), resp.getStatus());
@@ -159,7 +159,7 @@ public class TranslationResourceTest {
   }
 
   @Test
-  public void testInvalidCqlAsJson() {
+  void testInvalidCqlAsJson() {
     File file = new File(TranslationResourceTest.class.getResource("invalid.cql").getFile());
     Response resp = target.path("translator").request(TranslationResource.ELM_JSON_TYPE).post(Entity.entity(file, TranslationResource.CQL_TEXT_TYPE));
     assertEquals(Status.BAD_REQUEST.getStatusCode(), resp.getStatus());
@@ -178,7 +178,7 @@ public class TranslationResourceTest {
   }
 
   @Test
-  public void testMissingLibraryAsJson() {
+  void testMissingLibraryAsJson() {
     File file = new File(TranslationResourceTest.class.getResource("missingLibrary.cql").getFile());
     Response resp = target.path("translator").request(TranslationResource.ELM_JSON_TYPE).post(Entity.entity(file, TranslationResource.CQL_TEXT_TYPE));
     assertEquals(Status.BAD_REQUEST.getStatusCode(), resp.getStatus());
@@ -198,7 +198,7 @@ public class TranslationResourceTest {
   }
 
   @Test
-  public void testValidLibraryAsJson() {
+  void testValidLibraryAsJson() {
     File file = new File(TranslationResourceTest.class.getResource("valid.cql").getFile());
     Response resp = target.path("translator").request(TranslationResource.ELM_JSON_TYPE).post(Entity.entity(file, TranslationResource.CQL_TEXT_TYPE));
     assertEquals(Status.OK.getStatusCode(), resp.getStatus());
@@ -224,7 +224,7 @@ public class TranslationResourceTest {
   }
 
   @Test
-  public void testValidLibraryAsJsonWithAnnotationsAndResultTypes() {
+  void testValidLibraryAsJsonWithAnnotationsAndResultTypes() {
     File file = new File(TranslationResourceTest.class.getResource("valid.cql").getFile());
     Response resp = target.path("translator").queryParam("annotations", "true").queryParam("result-types", "true").request(TranslationResource.ELM_JSON_TYPE).post(Entity.entity(file, TranslationResource.CQL_TEXT_TYPE));
     assertEquals(Status.OK.getStatusCode(), resp.getStatus());
@@ -249,27 +249,27 @@ public class TranslationResourceTest {
   }
 
   @Test
-  public void testInvalidListPromotionExistsAsJson() {
+  void testInvalidListPromotionExistsAsJson() {
     validateListPromotionDisabled("ListPromotionExists.cql", 8, 13, "Could not resolve call to operator Exists with signature (System.Integer).");
   }
 
   @Test
-  public void testInvalidListPromotionInAsJson() {
+  void testInvalidListPromotionInAsJson() {
     validateListPromotionDisabled("ListPromotionIn.cql", 7, 16, "Could not resolve call to operator In with signature (System.Integer,System.Integer).");
   }
 
   @Test
-  public void testValidListPromotionInAsJson() {
+  void testValidListPromotionInAsJson() {
     validateListPromotionEnabled("ListPromotionIn.cql");
   }
 
   @Test
-  public void testValidListPromotionExistsAsJson() {
+  void testValidListPromotionExistsAsJson() {
     validateListPromotionEnabled("ListPromotionExists.cql");
   }
 
   @Test
-  public void testSingleLibraryAsMultipart() {
+  void testSingleLibraryAsMultipart() {
     File file = new File(TranslationResourceTest.class.getResource("valid.cql").getFile());
     FormDataMultiPart pkg = new FormDataMultiPart();
     pkg.field("foo", file, new MediaType("text", "cql"));
@@ -285,7 +285,7 @@ public class TranslationResourceTest {
   }
 
   @Test
-  public void testCrossLibraryResolution() {
+  void testCrossLibraryResolution() {
     String filenames[] = {"ProvidesDependency.cql", "HasDependency.cql"};
     FormDataMultiPart pkg = new FormDataMultiPart();
     for (String filename: filenames) {
@@ -313,7 +313,7 @@ public class TranslationResourceTest {
   }
 
   @Test
-  public void testMultipartRequestAsXml() throws Exception {
+  void testMultipartRequestAsXml() throws Exception {
     String filenames[] = {"valid.cql"};
     FormDataMultiPart pkg = new FormDataMultiPart();
     for (String filename: filenames) {
@@ -337,7 +337,7 @@ public class TranslationResourceTest {
   }
 
   @Test
-  public void testMultipartRequestAsJsonAndXml() throws Exception {
+  void testMultipartRequestAsJsonAndXml() throws Exception {
     String filenames[] = {"valid.cql"};
     FormDataMultiPart pkg = new FormDataMultiPart();
     for (String filename: filenames) {
@@ -370,7 +370,7 @@ public class TranslationResourceTest {
   }
 
   @Test
-  public void testLibraryThatNeedsUCUM() {
+  void testLibraryThatNeedsUCUM() {
     File file = new File(TranslationResourceTest.class.getResource("NeedsUCUM.cql").getFile());
     Response resp = target.path("translator").queryParam("signatures", "All").request(TranslationResource.ELM_JSON_TYPE).post(Entity.entity(file, TranslationResource.CQL_TEXT_TYPE));
     assertEquals(Status.OK.getStatusCode(), resp.getStatus());

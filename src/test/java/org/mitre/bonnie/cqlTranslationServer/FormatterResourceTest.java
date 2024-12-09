@@ -1,7 +1,7 @@
 package org.mitre.bonnie.cqlTranslationServer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -14,9 +14,9 @@ import jakarta.ws.rs.core.Response.Status;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class FormatterResourceTest {
 
@@ -26,7 +26,7 @@ public class FormatterResourceTest {
   // The CQL formatter is hard-coded to use \r\n for line breaks
   private final String newLine = "\r\n";
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     // start the server
     server = Main.startServer();
@@ -36,13 +36,13 @@ public class FormatterResourceTest {
     target = c.target(Main.BASE_URI.replace("0.0.0.0", "localhost"));
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     server.shutdownNow();
   }
 
   @Test
-  public void testUnformattedLibrary() {
+  void testUnformattedLibrary() {
     String input = "library HelloWorld using QDM define Hello: 'World'";
     Response resp = target.path("formatter").request(FormatterResource.CQL_TEXT_TYPE).post(Entity.entity(input, FormatterResource.CQL_TEXT_TYPE));
     assertEquals(Status.OK.getStatusCode(), resp.getStatus());
@@ -62,7 +62,7 @@ public class FormatterResourceTest {
   }
 
   @Test
-  public void testInvalidCql() {
+  void testInvalidCql() {
     String input = "lib HelloWorld using QDM define Hello: 'World'";
     Response resp = target.path("formatter").request(FormatterResource.CQL_TEXT_TYPE).post(Entity.entity(input, FormatterResource.CQL_TEXT_TYPE));
     assertEquals(Status.BAD_REQUEST.getStatusCode(), resp.getStatus());
@@ -73,7 +73,7 @@ public class FormatterResourceTest {
   }
 
   @Test
-  public void testSingleUnformattedLibraryAsMultipart() {
+  void testSingleUnformattedLibraryAsMultipart() {
     String input = "library HelloWorld2 using QDM define Hello: 'World2'";
     FormDataMultiPart pkg = new FormDataMultiPart();
     pkg.field("foo", input, new MediaType("text", "cql"));
@@ -99,7 +99,7 @@ public class FormatterResourceTest {
   }
 
   @Test
-  public void testTwoUnformattedLibrariesAsMultipart() {
+  void testTwoUnformattedLibrariesAsMultipart() {
     String input = "library HelloWorld3 using FHIR define Hello: 'World3'";
     String input2 = "library FHIRHelpers version '4.0.1' using FHIR version '4.0.1'\n" +
       "context Patient define \"IsFakeFHIRHelpers\": true";
@@ -142,7 +142,7 @@ public class FormatterResourceTest {
   }
 
   @Test
-  public void testInvalidCqlInMultipart() {
+  void testInvalidCqlInMultipart() {
     String input = "library HelloWorld3 using FHIR define Hello: 'World3'";
     String input2 = "library FHIRHelpers version '4.0.1' using FHIR version '4.0.1'\n" +
       "ctx Patient define \"IsFakeFHIRHelpers\": true";

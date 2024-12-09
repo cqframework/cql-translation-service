@@ -8,7 +8,7 @@ Build:
 
 Execute via the command line:
 
-    java -jar target/cqlTranslationServer-2.4.0.jar
+    java -jar target/cqlTranslationServer-2.6.0.jar
 
 _NOTE: The cqlTranslationServer jar assumes that all dependency jars are located in a `libs` directory relative to the jar's location. If you move the jar from the `target` directory, you will need to move the `target/libs` directory as well. This project no longer produces an "uber-jar", as the CQL-to-ELM classes do not function properly when repackaged into a single jar file._
 
@@ -17,7 +17,9 @@ _NOTE: The cqlTranslationServer jar assumes that all dependency jars are located
 CQL Translation Service versions prior to version 2.0.0 always mirrored the CQL Tools (CQL-to-ELM translator) version they exposed. Starting with version 2.0.0, semantic versioning is now used. As a result, the version of the CQL Translation Service differs from the version of the CQL Tools that it exposes. The following table shows the relationship between [CQL Translation Service releases](https://github.com/cqframework/cql-translation-service/releases) and [CQL Tools releases](https://github.com/cqframework/clinical_quality_language/releases). Note that prior releases from the [MITRE repo](https://github.com/mitre/cql-translation-service/releases) are not included here.
 
 | CQL Translation Service | CQL Tools                               |
-|-------------------------|-----------------------------------------|
+| ----------------------- | --------------------------------------- |
+| 2.6.0                   | 3.18.0                                  |
+| 2.5.0                   | 3.15.0                                  |
 | 2.4.0                   | 3.7.1                                   |
 | 2.3.0                   | 3.3.2                                   |
 | 2.2.0                   | 2.11.0                                  |
@@ -167,32 +169,33 @@ Will return:
 
 ### CQL-to-ELM Translator Options
 
-The CQL-to-ELM translator supports many options to control the output.  These options can be passed to the service as query parameters when you post CQL to the service (e.g., `POST http://localhost:8080/cql/translator?annotations=true&result-types=true`).  These query parameters are supported for both simple requests and multipart requests.  See the table below for the available options:
+The CQL-to-ELM translator supports many options to control the output. These options can be passed to the service as query parameters when you post CQL to the service (e.g., `POST http://localhost:8080/cql/translator?annotations=true&result-types=true`). These query parameters are supported for both simple requests and multipart requests. See the table below for the available options:
 
-|Option|Values|Default|
-|----|----|----|
-|date-range-optimization|true\|false|false|
-|annotations|true\|false|false|
-|locators|true\|false|false|
-|result-types|true\|false|false|
-|signatures|None\|Differing\|Overloads\|All|None|
-|detailed-errors|true\|false|false|
-|disable-list-traversal|true\|false|false|
-|disable-list-demotion|true\|false|false|
-|disable-list-promotion|true\|false|false|
-|enable-interval-demotion|true\|false|false|
-|enable-interval-promotion|true\|false|false|
-|disable-method-invocation|true\|false|false|
-|require-from-keyword|true\|false|false|
-|strict|true\|false|false|
-|debug|true\|false|false|
-|validate-units|true\|false|false|
+| Option                    | Values                          | Default |
+| ------------------------- | ------------------------------- | ------- |
+| date-range-optimization   | true\|false                     | false   |
+| annotations               | true\|false                     | false   |
+| locators                  | true\|false                     | false   |
+| result-types              | true\|false                     | false   |
+| signatures                | None\|Differing\|Overloads\|All | None    |
+| detailed-errors           | true\|false                     | false   |
+| disable-list-traversal    | true\|false                     | false   |
+| disable-list-demotion     | true\|false                     | false   |
+| disable-list-promotion    | true\|false                     | false   |
+| enable-interval-demotion  | true\|false                     | false   |
+| enable-interval-promotion | true\|false                     | false   |
+| disable-method-invocation | true\|false                     | false   |
+| require-from-keyword      | true\|false                     | false   |
+| strict                    | true\|false                     | false   |
+| debug                     | true\|false                     | false   |
+| validate-units            | true\|false                     | false   |
 
 For more information on each of these options, see the [CQL-to-ELM Overview](https://github.com/cqframework/clinical_quality_language/blob/master/Src/java/cql-to-elm/OVERVIEW.md#usage).
 
 _**NOTE:**_
-* _Previous versions of the CQL-to-ELM Translation Service defaulted **annotations** to true.  To align better with the CQL-to-ELM console client, the translation service now defaults annotations to false._
-* _Previous versions of the CQL-to-ELM Translation Service allowed list-promotion to be disabled via an extra multipart form field named **disablePromotion**. This is no longer supported, as it was ambiguous and inconsistent with the CQL-to-ELM console client.  The **disable-list-promotion** query parameter should be used instead._
+
+- _Previous versions of the CQL-to-ELM Translation Service defaulted **annotations** to true. To align better with the CQL-to-ELM console client, the translation service now defaults annotations to false._
+- _Previous versions of the CQL-to-ELM Translation Service allowed list-promotion to be disabled via an extra multipart form field named **disablePromotion**. This is no longer supported, as it was ambiguous and inconsistent with the CQL-to-ELM console client. The **disable-list-promotion** query parameter should be used instead._
 
 ## Formatter Endpoint
 
@@ -230,7 +233,6 @@ The service also supports `POST` of multiple CQL libraries packaged as
 formatted part for each CQL part in the submitted package.
 
 Example usage via HTTP request:
-
 
     POST /cql/formatter HTTP/1.1
     Host: localhost:8080
@@ -284,22 +286,21 @@ Will return:
       42
     --Boundary_2_1638692479_1658770032240--
 
-
 ## Docker Deployment
 
 You may deploy pre-built Docker images into your existing hosting environment with:
 
-	docker run -d -p 8080:8080 --restart unless-stopped cqframework/cql-translation-service:latest # or any official tag
+    docker run -d -p 8080:8080 --restart unless-stopped cqframework/cql-translation-service:latest # or any official tag
 
 And you're done. No environment variables or further configuration are needed. Jedis may use your existing Kubernetes, Open Shift etc installations as you see fit. :)
 
 To build your own image for your current architecture:
 
-	docker build -t cqframework/cql-translation-service:latest . # but use your your own repo and tag strings!
+    docker build -t cqframework/cql-translation-service:latest . # but use your your own repo and tag strings!
 
 To build your own image for multiple architectures (e.g., Intel and Mac M1):
 
-	docker buildx build --platform linux/amd64,linux/arm64 -t cqframework/cql-translation-service:latest . # but use your your own repo and tag strings!
+    docker buildx build --platform linux/amd64,linux/arm64 -t cqframework/cql-translation-service:latest . # but use your your own repo and tag strings!
 
 Note that Docker doesn't support loading multi-platform builds locally, so the above multi-platform build commmand is only helpful when used with `--push`. See: [https://github.com/docker/buildx/issues/59](https://github.com/docker/buildx/issues/59).
 
@@ -315,7 +316,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-		http://www.apache.org/licenses/LICENSE-2.0
+    	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
