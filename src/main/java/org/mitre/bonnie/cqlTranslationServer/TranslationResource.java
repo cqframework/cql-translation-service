@@ -20,14 +20,16 @@ import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 
+import org.cqframework.cql.cql2elm.CqlCompilerException.ErrorSeverity;
 import org.cqframework.cql.cql2elm.CqlCompilerOptions;
+import org.cqframework.cql.cql2elm.CqlCompilerOptions.Options;
 import org.cqframework.cql.cql2elm.CqlTranslator;
 import org.cqframework.cql.cql2elm.LibraryBuilder;
-import org.cqframework.cql.cql2elm.CqlCompilerOptions.Options;
 import org.cqframework.cql.cql2elm.LibraryManager;
 import org.cqframework.cql.cql2elm.ModelManager;
-import org.cqframework.cql.cql2elm.CqlCompilerException.ErrorSeverity;
+import org.cqframework.cql.cql2elm.StringLibrarySourceProvider;
 import org.cqframework.cql.cql2elm.quick.FhirLibrarySourceProvider;
+import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
@@ -112,7 +114,7 @@ public class TranslationResource {
 	  // for ourselves. See https://github.com/jersey/jersey/issues/2436
     try {
       LibraryManager libraryManager = this.getLibraryManager(info.getQueryParameters());
-      libraryManager.getLibrarySourceLoader().registerProvider(new MultipartLibrarySourceProvider(pkg));
+      libraryManager.getLibrarySourceLoader().registerProvider(new StringLibrarySourceProvider(extractLibraries(pkg)));
       FormDataMultiPart translatedPkg = new FormDataMultiPart();
       for (String fieldId: pkg.getFields().keySet()) {
         for (FormDataBodyPart part: pkg.getFields(fieldId)) {
@@ -153,6 +155,14 @@ public class TranslationResource {
     // FHIR library source provider is always needed for FHIR and harmless for other models
     libraryManager.getLibrarySourceLoader().registerProvider(new FhirLibrarySourceProvider());
     return libraryManager;
+  }
+
+  private List<String> extractLibraries(FormDataMultiPart pkg) {
+    List<String> libraries = new ArrayList<>();
+    for (BodyPart part: pkg.getBodyParts()) {
+      libraries.add(part.getEntityAs(String.class));
+    }
+    return libraries;
   }
 
   private ResponseBuilder getResponse(CqlTranslator translator) {
