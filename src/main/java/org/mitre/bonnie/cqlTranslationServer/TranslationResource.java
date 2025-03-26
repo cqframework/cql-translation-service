@@ -137,6 +137,10 @@ public class TranslationResource {
       return resp.build();
     } catch (IOException ex) {
       throw new TranslationFailureException("Unable to read request");
+    } catch (Exception ex) {
+      System.out.println("Thrown Exception: " + ex.getMessage());
+      ex.printStackTrace();
+      throw new TranslationFailureException("Other exception");
     }
   }
 

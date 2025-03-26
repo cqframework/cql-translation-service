@@ -1,5 +1,5 @@
 # fetch basic image
-FROM maven:3.9.5-eclipse-temurin-11
+FROM maven:3.9.9-eclipse-temurin-17
 
 # application placed into /opt/app
 RUN mkdir -p /app
