@@ -15,6 +15,16 @@
       <name>Sonatype Public</name>
       <url>https://oss.sonatype.org/content/groups/public/</url>
     </repository>
+    <repository>
+      <id>sonatype-releases</id>
+      <name>Sonatype Releases</name>
+      <url>https://s01.oss.sonatype.org/content/repositories/releases/</url>
+    </repository>
+    <repository>
+      <id>sonatype-snapshot</id>
+      <name>Sonatype Snapshot</name>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
   </repositories>
 
   <dependencyManagement>
@@ -80,12 +90,12 @@
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
-      <artifactId>model-jaxb</artifactId>
+      <artifactId>model-xmlutil</artifactId>
       <version>${cql.version}</version>
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
-      <artifactId>elm-jaxb</artifactId>
+      <artifactId>elm-xmlutil</artifactId>
       <version>${cql.version}</version>
     </dependency>
     <dependency>
@@ -100,8 +110,19 @@
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
+      <artifactId>ucum</artifactId>
+      <version>${cql.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>info.cqframework</groupId>
       <artifactId>cql-formatter</artifactId>
       <version>${cql.version}</version>
+    </dependency>
+    <!-- Include xmlutil 0.91.0-RC1 because the snapshot cql-to-elm declares is not resolving -->
+    <dependency>
+      <groupId>io.github.pdvrieze.xmlutil</groupId>
+      <artifactId>serialization-jvm</artifactId>
+      <version>0.91.0-RC1</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
@@ -172,6 +193,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>libs/</classpathPrefix>
+              <useUniqueVersions>false</useUniqueVersions>
               <mainClass>org.mitre.bonnie.cqlTranslationServer.Main</mainClass>
             </manifest>
           </archive>
@@ -181,7 +203,7 @@
   </build>
 
   <properties>
-    <cql.version>3.22.0</cql.version>
+    <cql.version>4.0.0-SNAPSHOT</cql.version>
     <jersey.version>3.1.8</jersey.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
