@@ -75,16 +75,6 @@
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
-      <artifactId>cql</artifactId>
-      <version>${cql.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>info.cqframework</groupId>
-      <artifactId>model</artifactId>
-      <version>${cql.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>info.cqframework</groupId>
       <artifactId>cql-to-elm</artifactId>
       <version>${cql.version}</version>
     </dependency>
@@ -117,15 +107,6 @@
       <groupId>commons-cli</groupId>
       <artifactId>commons-cli</artifactId>
       <version>1.6.0</version>
-    </dependency>
-    <!--
-      We now need to supply our own xpp3 implementation. Use the same one as is used here:
-      https://github.com/cqframework/clinical_quality_language/blob/master/Src/java/buildSrc/src/main/groovy/cql.fhir-conventions.gradle
-    -->
-    <dependency>
-      <groupId>org.ogce</groupId>
-      <artifactId>xpp3</artifactId>
-      <version>1.1.6</version>
     </dependency>
     <dependency>
       <groupId>jakarta.validation</groupId>
