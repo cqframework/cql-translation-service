@@ -6,7 +6,7 @@
   <groupId>org.mitre.bonnie</groupId>
   <artifactId>cqlTranslationServer</artifactId>
   <packaging>jar</packaging>
-  <version>2.6.0</version>
+  <version>2.7.0</version>
   <name>cqlTranslationServer</name>
 
   <repositories>
@@ -181,7 +181,7 @@
   </build>
 
   <properties>
-    <cql.version>3.18.0</cql.version>
+    <cql.version>3.22.0</cql.version>
     <jersey.version>3.1.8</jersey.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
