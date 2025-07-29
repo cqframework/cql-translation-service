@@ -38,7 +38,7 @@ The `/cql/translator` endpoint handles translating CQL to ELM JSON and/or XML.
 Example usage via HTTP request:
 
     POST /cql/translator HTTP/1.1
-    Content-Type: application/cql
+    Content-Type: text/cql
     Accept: application/elm+json
     Host: localhost:8080
     Connection: close
@@ -207,8 +207,8 @@ The `/cql/formatter` endpoint handles reformatting CQL for improved consistency 
 Example usage via HTTP request:
 
     POST /cql/formatter HTTP/1.1
-    Content-Type: application/cql
-    Accept: application/cql
+    Content-Type: text/cql
+    Accept: text/cql
     Host: localhost:8080
     Content-Length: 50
 
@@ -217,7 +217,7 @@ Example usage via HTTP request:
 Will return:
 
     HTTP/1.1 200 OK
-    Content-Type: application/cql
+    Content-Type: text/cql
     Content-Length: 59
 
     library HelloWorld
@@ -260,7 +260,7 @@ Will return:
     Content-Length: 600
 
     --Boundary_2_1638692479_1658770032240
-    Content-Type: application/cql
+    Content-Type: text/cql
     Content-Disposition: form-data; name="FHIRHelpers.cql"
 
     library FHIRHelpers version '4.0.1'
@@ -272,7 +272,7 @@ Will return:
     define "IsFakeFHIRHelpers":
       true
     --Boundary_2_1638692479_1658770032240
-    Content-Type: application/cql
+    Content-Type: text/cql
     Content-Disposition: form-data; name="Simple.cql"
 
     library "SimpleLibrary" version '0.0.1'

@@ -76,7 +76,7 @@ public class FormatterResourceTest {
   void testSingleUnformattedLibraryAsMultipart() {
     String input = "library HelloWorld2 using QDM define Hello: 'World2'";
     FormDataMultiPart pkg = new FormDataMultiPart();
-    pkg.field("foo", input, new MediaType("application", "cql"));
+    pkg.field("foo", input, new MediaType("text", "cql"));
     Response resp = target.path("formatter").request(MediaType.MULTIPART_FORM_DATA).post(Entity.entity(pkg, MediaType.MULTIPART_FORM_DATA));
     assertEquals(Status.OK.getStatusCode(), resp.getStatus());
     assertEquals(MediaType.MULTIPART_FORM_DATA_TYPE.getType(), resp.getMediaType().getType());
@@ -104,8 +104,8 @@ public class FormatterResourceTest {
     String input2 = "library FHIRHelpers version '4.0.1' using FHIR version '4.0.1'\n" +
       "context Patient define \"IsFakeFHIRHelpers\": true";
     FormDataMultiPart pkg = new FormDataMultiPart();
-    pkg.field("foo", input, new MediaType("application", "cql"));
-    pkg.field("zoo", input2, new MediaType("application", "cql"));
+    pkg.field("foo", input, new MediaType("text", "cql"));
+    pkg.field("zoo", input2, new MediaType("text", "cql"));
     Response resp = target.path("formatter").request(MediaType.MULTIPART_FORM_DATA).post(Entity.entity(pkg, MediaType.MULTIPART_FORM_DATA));
     assertEquals(Status.OK.getStatusCode(), resp.getStatus());
     assertEquals(MediaType.MULTIPART_FORM_DATA_TYPE.getType(), resp.getMediaType().getType());
@@ -147,8 +147,8 @@ public class FormatterResourceTest {
     String input2 = "library FHIRHelpers version '4.0.1' using FHIR version '4.0.1'\n" +
       "ctx Patient define \"IsFakeFHIRHelpers\": true";
     FormDataMultiPart pkg = new FormDataMultiPart();
-    pkg.field("foo", input, new MediaType("application", "cql"));
-    pkg.field("zoo", input2, new MediaType("application", "cql"));
+    pkg.field("foo", input, new MediaType("text", "cql"));
+    pkg.field("zoo", input2, new MediaType("text", "cql"));
     Response resp = target.path("formatter").request(MediaType.MULTIPART_FORM_DATA).post(Entity.entity(pkg, MediaType.MULTIPART_FORM_DATA));
     assertEquals(Status.BAD_REQUEST.getStatusCode(), resp.getStatus());
     assertEquals("text/plain", resp.getMediaType().toString());
