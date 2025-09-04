@@ -8,7 +8,7 @@ Build:
 
 Execute via the command line:
 
-    java -jar target/cqlTranslationServer-2.6.0.jar
+    java -jar target/cqlTranslationServer-2.7.0.jar
 
 _NOTE: The cqlTranslationServer jar assumes that all dependency jars are located in a `libs` directory relative to the jar's location. If you move the jar from the `target` directory, you will need to move the `target/libs` directory as well. This project no longer produces an "uber-jar", as the CQL-to-ELM classes do not function properly when repackaged into a single jar file._
 
@@ -18,6 +18,7 @@ CQL Translation Service versions prior to version 2.0.0 always mirrored the CQL 
 
 | CQL Translation Service | CQL Tools                               |
 | ----------------------- | --------------------------------------- |
+| 2.7.0                   | 3.22.0                                  |
 | 2.6.0                   | 3.18.0                                  |
 | 2.5.0                   | 3.15.0                                  |
 | 2.4.0                   | 3.7.1                                   |

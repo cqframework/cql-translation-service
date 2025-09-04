@@ -6,7 +6,7 @@
   <groupId>org.mitre.bonnie</groupId>
   <artifactId>cqlTranslationServer</artifactId>
   <packaging>jar</packaging>
-  <version>2.6.0</version>
+  <version>2.7.0</version>
   <name>cqlTranslationServer</name>
 
   <repositories>
@@ -90,16 +90,6 @@
     </dependency>
     <dependency>
       <groupId>info.cqframework</groupId>
-      <artifactId>model-xmlutil</artifactId>
-      <version>${cql.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>info.cqframework</groupId>
-      <artifactId>elm-xmlutil</artifactId>
-      <version>${cql.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>info.cqframework</groupId>
       <artifactId>quick</artifactId>
       <version>${cql.version}</version>
     </dependency>
@@ -117,12 +107,6 @@
       <groupId>info.cqframework</groupId>
       <artifactId>cql-formatter</artifactId>
       <version>${cql.version}</version>
-    </dependency>
-    <!-- Include xmlutil 0.91.0-RC1 because the snapshot cql-to-elm declares is not resolving -->
-    <dependency>
-      <groupId>io.github.pdvrieze.xmlutil</groupId>
-      <artifactId>serialization-jvm</artifactId>
-      <version>0.91.0-RC1</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
