@@ -77,7 +77,7 @@ public class TranslationResource {
   public Response cqlToElmXml(File cql, @Context UriInfo info) {
     try {
       LibraryManager libraryManager = this.getLibraryManager(info.getQueryParameters());
-      CqlTranslator translator = CqlTranslator.fromFile(cql, libraryManager);
+      CqlTranslator translator = CqlTranslator.fromFile(new kotlinx.io.files.Path(cql), libraryManager);
       ResponseBuilder resp = getResponse(translator);
       resp = resp.entity(translator.toXml()).type(ELM_XML_TYPE);
       return resp.build();
@@ -93,7 +93,7 @@ public class TranslationResource {
   public Response cqlToElmJson(File cql, @Context UriInfo info) {
     try {
       LibraryManager libraryManager = this.getLibraryManager(info.getQueryParameters());
-      CqlTranslator translator = CqlTranslator.fromFile(cql, libraryManager);
+      CqlTranslator translator = CqlTranslator.fromFile(new kotlinx.io.files.Path(cql), libraryManager);
       ResponseBuilder resp = getResponse(translator);
       resp = resp.entity(translator.toJson()).type(ELM_JSON_TYPE);
       return resp.build();
@@ -118,7 +118,7 @@ public class TranslationResource {
       FormDataMultiPart translatedPkg = new FormDataMultiPart();
       for (String fieldId: pkg.getFields().keySet()) {
         for (FormDataBodyPart part: pkg.getFields(fieldId)) {
-          CqlTranslator translator = CqlTranslator.fromFile(part.getEntityAs(File.class), libraryManager);
+          CqlTranslator translator = CqlTranslator.fromFile(new kotlinx.io.files.Path(part.getEntityAs(File.class)), libraryManager);
           for( String format : targetFormats ) {
             for( String subformat : format.split(",") ) {
               MediaType targetFormat = MediaType.valueOf( subformat );
