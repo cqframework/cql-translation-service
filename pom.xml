@@ -84,27 +84,27 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>info.cqframework</groupId>
+      <groupId>org.cqframework</groupId>
       <artifactId>cql-to-elm</artifactId>
       <version>${cql.version}</version>
     </dependency>
     <dependency>
-      <groupId>info.cqframework</groupId>
+      <groupId>org.cqframework</groupId>
       <artifactId>quick</artifactId>
       <version>${cql.version}</version>
     </dependency>
     <dependency>
-      <groupId>info.cqframework</groupId>
+      <groupId>org.cqframework</groupId>
       <artifactId>qdm</artifactId>
       <version>${cql.version}</version>
     </dependency>
     <dependency>
-      <groupId>info.cqframework</groupId>
+      <groupId>org.cqframework</groupId>
       <artifactId>ucum</artifactId>
       <version>${cql.version}</version>
     </dependency>
     <dependency>
-      <groupId>info.cqframework</groupId>
+      <groupId>org.cqframework</groupId>
       <artifactId>cql-formatter</artifactId>
       <version>${cql.version}</version>
     </dependency>

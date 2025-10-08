@@ -14,7 +14,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.UriInfo;
+import org.cqframework.cql.tools.formatter.Main;
 import org.cqframework.cql.tools.formatter.CqlFormatterVisitor;
+import org.cqframework.cql.tools.formatter.CqlFormatterVisitor.Companion;
 import org.cqframework.cql.tools.formatter.CqlFormatterVisitor.FormatResult;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -35,7 +37,7 @@ public class FormatterResource {
     FileInputStream is = null;
     try {
       is = new FileInputStream(cql);
-      FormatResult result = CqlFormatterVisitor.getFormattedOutput(is);
+      FormatResult result = CqlFormatterVisitor.Companion.getFormattedOutput(is);
       if( result.getErrors() != null && result.getErrors().size() > 0 ) {
         throw new FormatFailureException(result.getErrors());
       }
@@ -69,7 +71,7 @@ public class FormatterResource {
           FileInputStream is = null;
           try {
             is = new FileInputStream(part.getEntityAs(File.class));
-            FormatResult result = CqlFormatterVisitor.getFormattedOutput(is);
+            FormatResult result = CqlFormatterVisitor.Companion.getFormattedOutput(is);
             if( result.getErrors() != null && result.getErrors().size() > 0 ) {
                 throw new FormatFailureException(result.getErrors());
             }
