@@ -18,7 +18,7 @@ CQL Translation Service versions prior to version 2.0.0 always mirrored the CQL 
 
 | CQL Translation Service | CQL Tools                               |
 | ----------------------- | --------------------------------------- |
-| 2.7.0                   | 3.22.0                                  |
+| 2.7.x                   | 3.22.0                                  |
 | 2.6.0                   | 3.18.0                                  |
 | 2.5.0                   | 3.15.0                                  |
 | 2.4.0                   | 3.7.1                                   |
