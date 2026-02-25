@@ -194,7 +194,7 @@ public class TranslationResourceTest {
     assertEquals("include", errorAnnotation.getString("errorType"));
     assertEquals(5, errorAnnotation.getInt("startLine"));
     assertEquals(1, errorAnnotation.getInt("startChar"));
-    assertEquals("Could not load source for library CMSAll, version 1.", errorAnnotation.getString("message"));
+    assertEquals("Could not load source for library CMSAll, version 1, namespace uri null.", errorAnnotation.getString("message"));
   }
 
   @Test
@@ -255,7 +255,7 @@ public class TranslationResourceTest {
 
   @Test
   void testInvalidListPromotionInAsJson() {
-    validateListPromotionDisabled("ListPromotionIn.cql", 7, 16, "Could not resolve call to operator In with signature (System.Integer,System.Integer).");
+    validateListPromotionDisabled("ListPromotionIn.cql", 7, 16, "Could not resolve call to operator In with signature (System.Integer, System.Integer).");
   }
 
   @Test
