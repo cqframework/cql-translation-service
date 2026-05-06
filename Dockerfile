@@ -1,22 +1,29 @@
-# fetch basic image
-FROM maven:3.9.9-eclipse-temurin-17
+###################################################################################################
+# Stage 1: Build the application
+###################################################################################################
 
-# application placed into /opt/app
-RUN mkdir -p /app
+FROM dhi.io/maven:3-jdk17-debian13-dev AS build
 WORKDIR /app
 
-# selectively add the POM file and
-# install dependencies
-COPY pom.xml /app/
-RUN mvn install
+# selectively add the POM file and install dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
 
-# rest of the project
-COPY src /app/src
+# add the src and package it
+COPY src src
 RUN mvn package
 
-# local application port
-EXPOSE 8080
+###################################################################################################
+# Stage 2: Create the final runtime image
+###################################################################################################
 
-# execute it
-# CMD ["mvn", "exec:java"]
-CMD ["java", "-jar", "target/cqlTranslationServer-2.9.0.jar", "-d"]
+FROM dhi.io/eclipse-temurin:17-debian13
+WORKDIR /app
+
+# copy the translation service jar and dependency libs from the previous build
+COPY --from=build /app/target/cqlTranslationServer-*.jar cqlTranslationServer.jar
+COPY --from=build /app/target/libs libs/
+
+# Expose the port and run it!
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/app/cqlTranslationServer.jar", "-d"]
