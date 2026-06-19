@@ -1,6 +1,6 @@
 library CMSAll version '1'
 
-using QUICK
+using FHIR version '4.0.1'
 
 parameter MeasurementPeriod Interval<DateTime>
 
